@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite the associated manuscript."
-title: "The label economics of calibration transfer: simple correction versus deep and physics-informed representations across five benchmarks and two spectral modalities"
+title: "The label economics of calibration transfer: a five-benchmark, dual-modality evaluation of simple corrections versus deep and physics-informed representations"
 authors:
   - family-names: Li
     given-names: Panlin

@@ -2,11 +2,9 @@
 
 Code and reproducibility materials for the manuscript
 
-**"The label economics of calibration transfer: simple correction versus deep and
-physics-informed representations across five benchmarks and two spectral modalities"**
-(manuscript in preparation; target venue *Chemometrics and Intelligent Laboratory
-Systems*). The English manuscript is being prepared from a Chinese draft; the
-title above is a working translation and may change.
+**"The label economics of calibration transfer: a five-benchmark, dual-modality
+evaluation of simple corrections versus deep and physics-informed representations"**
+(under review, *Chemometrics and Intelligent Laboratory Systems*).
 
 ## Overview
 
@@ -201,13 +199,12 @@ the paths in the docstrings, logs, and manuscript remain traceable. Because
 
 ```bibtex
 @article{li2026label,
-  title   = {The label economics of calibration transfer: simple correction versus
-             deep and physics-informed representations across five benchmarks and
-             two spectral modalities},
+  title   = {The label economics of calibration transfer: a five-benchmark,
+             dual-modality evaluation of simple corrections versus deep and
+             physics-informed representations},
   author  = {Li, Panlin and Li, Yuchang and Li, Longjie and Liu, Ya and Feng, Yutong
              and Akram, Muhammad Waqar and Guo, Junxian and Huang, Hua},
-  note    = {Manuscript in preparation; target venue: Chemometrics and
-             Intelligent Laboratory Systems},
+  journal = {Chemometrics and Intelligent Laboratory Systems (under review)},
   year    = {2026}
 }
 ```
@@ -216,7 +213,7 @@ the paths in the docstrings, logs, and manuscript remain traceable. Because
 
 Code is released under the **MIT License** (see [`LICENSE`](LICENSE)). All datasets
 remain subject to their original licenses (see [`data/DATA.md`](data/DATA.md)). The
-manuscript is not included in this repository.
+manuscript is under peer review and is not included in this repository.
 
 ## Contact
 
