@@ -1,0 +1,93 @@
+# pyproject.toml — project tooling configuration (ruff / mypy / pytest)
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+src = ["code"]
+# Tiered quality gate: strict checks apply only to the core traceable pipeline
+# — export_utils (incl. the LLH-GBID §15.10 functions) + the key analysis scripts 61–66.
+# One-off exploratory/experimental scripts (02_data_processing and 06–60) and the retired
+# CSAE generators (refs_csae/48/49) are exempt from strict lint/type checks: they are not
+# part of the paper's traceable chain, and retrofitting 2000+ annotations has negligible value.
+extend-exclude = [
+    "__pycache__", "wandb", "runs", "07checkpoints", "04outputs", "05logs",
+    "code/0[2-9]*.py", "code/[1-5][0-9]*.py", "code/60*.py",
+    "code/99_replot_english.py", "code/refs_csae.py", "code/content_csae.py",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF", "N", "C4", "PT"]
+fixable = ["I", "UP", "RUF", "C4"]
+# RUF001/002/003 misflag CJK punctuation as "ambiguous characters", which conflicts with
+# the Chinese docstrings kept in some scripts; they must stay disabled.
+ignore = ["RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.lint.per-file-ignores]
+"code/01_export_utils.py" = ["N803", "N806", "E741"]
+"code/tests/*.py" = ["N803", "N806", "E741"]
+# The LLH-GBID §15 functions use the paper's mathematical symbols for parameters and
+# variables (I, L, T, W, q_B, q_W, C_B, C_W, U_d, D_d, ...). Keeping code identifiers
+# aligned with the paper's formulas is a prerequisite for traceability, so PEP8 naming
+# rules and E741 (ambiguous variable names) are waived here.
+# Test files must use the same symbols, otherwise assertions cannot be compared
+# term-by-term against the paper's formulas.
+# The key analysis scripts 61-64 (transfer benchmark / crossover engine / deep transfer)
+# likewise name spectra and operator matrices after the paper's math symbols
+# (X/Xs/Xt spectral matrices, K/Kss/Ktt kernel matrices, C/Cs/Ct CORAL covariances,
+# W/P/V projections and weights, ...) — same rationale as export_utils, so N803/N806
+# are waived; N812 allows the idiomatic PyTorch alias `functional as F`.
+"code/61_benchmark_datasets.py" = ["N803", "N806"]
+"code/62_crossover_engine.py" = ["N803", "N806"]
+"code/63_crossover_analysis.py" = ["N803", "N806"]
+"code/64_deep_transfer_server.py" = ["N803", "N806", "N812"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_return_any = true
+strict_optional = true
+no_implicit_optional = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+files = ["code"]
+# Same tiering as ruff: strict covers only the core (export_utils + 61-66);
+# exploratory/experimental scripts (02_data_processing and 06-60) and the retired CSAE
+# generators are exempt from strict type checking.
+exclude = [
+    "wandb", "runs", "07checkpoints", "04outputs", "05logs", "__pycache__",
+    "code/(0[2-9]|[1-5][0-9]|60).*\\.py$",
+    "code/99_replot_english\\.py$",
+    "code/refs_csae\\.py$",
+    "code/content_csae\\.py$",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["code/tests"]
+# The scripts directory contains modules whose names start with digits, so it cannot be
+# imported as a package; pythonpath lets tests `import export_utils` directly without
+# patching sys.path in every file.
+pythonpath = ["code"]
+addopts = "-ra -q --strict-markers --tb=short"
+xfail_strict = true
+markers = [
+    "slow: tests that take significant time to run",
+    "gpu: tests that require GPU (CUDA or MPS)",
+    "integration: end-to-end integration tests",
+]
+
+# Third-party scientific libraries lack official type stubs (pandas/scipy require separate
+# *-stubs packages; baycomp/statsmodels do not ship py.typed upstream). Allow their imports
+# without relaxing the strict checks on this project's own code.
+[[tool.mypy.overrides]]
+module = ["pandas.*", "scipy.*", "baycomp.*", "statsmodels.*", "sklearn.*"]
+ignore_missing_imports = true
+# When later adding stub-less libraries (sklearn / imblearn / shap / seaborn, ...), append
+# matching entries here. Keep this list in sync with actual imports: warn_unused_configs
+# reports superfluous entries.

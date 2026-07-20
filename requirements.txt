@@ -1,0 +1,38 @@
+# Pinned dependencies for the calibration-transfer reckoning.
+# Versions are those used for the results reported in the manuscript.
+# Python 3.10+ (developed and run on 3.13).
+
+# --- Core scientific stack ---
+numpy==2.2.6
+pandas==2.3.2
+scipy==1.16.1
+scikit-learn==1.6.1
+statsmodels==0.14.6
+
+# --- Deep baselines (CNN / DeepCORAL / DANN / Phys+BL) ---
+# CPU wheels install by default; for CUDA follow https://pytorch.org/get-started/
+torch==2.8.0
+
+# --- Signal processing (wavelet-based preprocessing options) ---
+PyWavelets==1.9.0
+
+# --- Statistics: Bayesian method comparison ---
+baycomp==1.0.3
+
+# --- Figures ---
+matplotlib==3.10.5
+
+# --- Tabular I/O (result workbooks) ---
+openpyxl==3.1.5
+xlsxwriter==3.2.9
+xlrd==2.0.2
+
+# --- Run tracking and compute accounting (optional at runtime) ---
+wandb==0.26.1
+codecarbon==3.2.6
+psutil==6.1.1
+
+# --- Development: lint, type check, tests (optional) ---
+ruff==0.15.12
+mypy==2.1.0
+pytest==9.0.3

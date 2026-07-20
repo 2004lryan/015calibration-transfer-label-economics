@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the associated manuscript."
+title: "The label economics of calibration transfer: simple correction versus deep and physics-informed representations across five benchmarks and two spectral modalities"
+authors:
+  - family-names: Li
+    given-names: Panlin
+    affiliation: Xinjiang Agricultural University
+  - family-names: Li
+    given-names: Yuchang
+    affiliation: Xinjiang Agricultural University
+  - family-names: Li
+    given-names: Longjie
+    affiliation: Xinjiang Agricultural University
+  - family-names: Liu
+    given-names: Ya
+    affiliation: Xinjiang Academy of Agricultural Sciences
+  - family-names: Feng
+    given-names: Yutong
+    affiliation: Xinjiang Agricultural University
+  - family-names: Akram
+    given-names: Muhammad Waqar
+    affiliation: University of Agriculture Faisalabad
+  - family-names: Guo
+    given-names: Junxian
+    affiliation: Xinjiang Agricultural University
+  - family-names: Huang
+    given-names: Hua
+    affiliation: Xinjiang Agricultural University
+    email: huanghua@xjau.edu.cn
+repository-code: "https://github.com/2004lryan/015calibration-transfer-label-economics"
+license: MIT
+date-released: "2026-07-20"
