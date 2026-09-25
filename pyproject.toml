@@ -3,16 +3,16 @@
 [tool.ruff]
 line-length = 120
 target-version = "py310"
-src = ["code"]
-# Tiered quality gate: strict checks apply only to the core traceable pipeline
-# — export_utils (incl. the LLH-GBID §15.10 functions) + the key analysis scripts 61–66.
-# One-off exploratory/experimental scripts (02_data_processing and 06–60) and the retired
-# CSAE generators (refs_csae/48/49) are exempt from strict lint/type checks: they are not
-# part of the paper's traceable chain, and retrofitting 2000+ annotations has negligible value.
+src = ["02code"]
+# Tiered quality gate: strict checks apply to the shared utilities (01_export_utils, incl. the
+# LLH-GBID §15.10 functions), the core benchmark scripts 61-66, the dataset registry
+# (fetch_datasets.py) and the test suite. The case-study scripts (02-60), the revision
+# analyses (67-110) and the shell runners are exempt: they carry the code that produced the
+# manuscript's results, and restyling them would break that traceability.
 extend-exclude = [
     "__pycache__", "wandb", "runs", "07checkpoints", "04outputs", "05logs",
-    "code/0[2-9]*.py", "code/[1-5][0-9]*.py", "code/60*.py",
-    "code/99_replot_english.py", "code/refs_csae.py", "code/content_csae.py",
+    "02code/0[2-9]*.py", "02code/[1-5][0-9]*.py", "02code/60*.py",
+    "02code/6[7-9]*.py", "02code/[7-9][0-9]*.py",
 ]
 
 [tool.ruff.lint]
@@ -23,8 +23,8 @@ fixable = ["I", "UP", "RUF", "C4"]
 ignore = ["RUF001", "RUF002", "RUF003"]
 
 [tool.ruff.lint.per-file-ignores]
-"code/01_export_utils.py" = ["N803", "N806", "E741"]
-"code/tests/*.py" = ["N803", "N806", "E741"]
+"02code/01_export_utils.py" = ["N803", "N806", "E741"]
+"02code/tests/*.py" = ["N803", "N806", "E741"]
 # The LLH-GBID §15 functions use the paper's mathematical symbols for parameters and
 # variables (I, L, T, W, q_B, q_W, C_B, C_W, U_d, D_d, ...). Keeping code identifiers
 # aligned with the paper's formulas is a prerequisite for traceability, so PEP8 naming
@@ -36,10 +36,10 @@ ignore = ["RUF001", "RUF002", "RUF003"]
 # (X/Xs/Xt spectral matrices, K/Kss/Ktt kernel matrices, C/Cs/Ct CORAL covariances,
 # W/P/V projections and weights, ...) — same rationale as export_utils, so N803/N806
 # are waived; N812 allows the idiomatic PyTorch alias `functional as F`.
-"code/61_benchmark_datasets.py" = ["N803", "N806"]
-"code/62_crossover_engine.py" = ["N803", "N806"]
-"code/63_crossover_analysis.py" = ["N803", "N806"]
-"code/64_deep_transfer_server.py" = ["N803", "N806", "N812"]
+"02code/61_benchmark_datasets.py" = ["N803", "N806"]
+"02code/62_crossover_engine.py" = ["N803", "N806"]
+"02code/63_crossover_analysis.py" = ["N803", "N806"]
+"02code/64_deep_transfer_server.py" = ["N803", "N806", "N812"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -56,24 +56,20 @@ disallow_incomplete_defs = true
 warn_unused_ignores = true
 warn_redundant_casts = true
 warn_unused_configs = true
-files = ["code"]
-# Same tiering as ruff: strict covers only the core (export_utils + 61-66);
-# exploratory/experimental scripts (02_data_processing and 06-60) and the retired CSAE
-# generators are exempt from strict type checking.
+files = ["02code"]
+# Same tiering as ruff: strict covers the core (export_utils + 61-66); the case-study
+# scripts (02-60) and the revision analyses (67-110) are exempt from strict type checking.
 exclude = [
     "wandb", "runs", "07checkpoints", "04outputs", "05logs", "__pycache__",
-    "code/(0[2-9]|[1-5][0-9]|60).*\\.py$",
-    "code/99_replot_english\\.py$",
-    "code/refs_csae\\.py$",
-    "code/content_csae\\.py$",
+    "02code/(0[2-9]|[1-5][0-9]|60|6[7-9]|[7-9][0-9]).*\\.py$",
 ]
 
 [tool.pytest.ini_options]
-testpaths = ["code/tests"]
+testpaths = ["02code/tests"]
 # The scripts directory contains modules whose names start with digits, so it cannot be
 # imported as a package; pythonpath lets tests `import export_utils` directly without
 # patching sys.path in every file.
-pythonpath = ["code"]
+pythonpath = ["02code"]
 addopts = "-ra -q --strict-markers --tb=short"
 xfail_strict = true
 markers = [

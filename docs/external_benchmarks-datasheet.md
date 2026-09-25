@@ -52,8 +52,8 @@ licenses and checksums are in [`../data/DATA.md`](../data/DATA.md).
 
 - **Source**: Anderson et al. 2020, Mendeley Data (CC-BY 4.0), DOI
   `10.17632/46htwnp833`. SHA-256 (16): `86159e2df9244fa5`.
-- **Composition**: intact mango fruit measured across 4 harvest seasons, Vis-NIR
-  spectra binned to 103 channels.
+- **Composition**: intact mango fruit measured across 4 harvest seasons, vis-NIR
+  spectra over 285–1200 nm, 306 channels.
 - **Labels**: dry matter content (DM).
 - **Drift**: season / population drift. Not paired.
 - **Tasks**: 4 seasons taken pairwise and ordered × 1 property = 12.
@@ -62,16 +62,21 @@ licenses and checksums are in [`../data/DATA.md`](../data/DATA.md).
 
 ## Shared protocol
 
-Every benchmark is mapped onto one schema by `code/61_benchmark_datasets.py`:
+Every benchmark is mapped onto one schema by `02code/61_benchmark_datasets.py`:
 
 ```python
 dict(name, modality, shift_type, properties, paired,
      domains={domain_key: dict(X=(n, p), Y=(n, n_prop), wl=(p,))})
 ```
 
-All tasks share the same evaluation pipeline: the source domain supplies the full
-calibration set; the target domain supplies a fixed label budget
-`n ∈ {0, 5, 10, 20, 40}` with the remainder held out for testing; results are
-averaged over 5 fixed random seeds; and statistical tests cluster on the target
-set. No target test sample participates in any fitting, selection or thresholding
-step.
+All tasks share one evaluation pipeline. The source domain supplies the calibration
+set of the source model. Each task draws a split in which the target domain is halved into a test set and a
+calibration pool; each budget `n ∈ {0, 5, 10, 20, 40}` is drawn from the pool. The
+classical methods repeat the draw five times per seed and the deep methods once
+(25 and 5 runs per cell, five fixed seeds `[20060515, 20041210, 19810915, 2023,
+2024]`), and per-task values are medians over the runs. Target labels never enter
+model selection. Unlabelled target spectra do enter three steps: CORAL estimates its
+moments from all target spectra, DANN and Deep CORAL use the unlabelled spectra of
+the calibration pool, and on apple the season-wise outlier removal and band-wise
+standardisation see every spectrum of the season, for every method alike (manuscript
+Section 2.3).
