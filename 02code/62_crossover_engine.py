@@ -54,7 +54,7 @@ bench = importlib.util.module_from_spec(_bs)
 _bs.loader.exec_module(bench)
 
 SEED = 20060515
-SEEDS = [20060515, 20041210, 19810915, 2023, 2024]   # CLAUDE.md §5.3 固定 5 种子(Formal)
+SEEDS = [20060515, 20041210, 19810915, 2023, 2024]   # 项目约定 §5.3 固定 5 种子(Formal)
 NCAL_GRID = [0, 5, 10, 20, 40, 80]
 REP = 10
 DOMAIN_CAP = 800     # 大域子采样上限(crossover 测量 800 样本已足,提速 mango/OSSL)

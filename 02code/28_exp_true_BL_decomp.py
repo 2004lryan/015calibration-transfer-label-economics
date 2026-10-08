@@ -1,7 +1,7 @@
 """
 28_exp_true_BL_decomp.py：真三组分 Beer-Lambert 分解（NMF/约束 LS）
 
-外审 codex（CRITICAL 1）指出：
+外审（CRITICAL 1）指出：
     论文 §3.1 写"基于三组分 BL 分解"，但 03_exp_BL_validation.py 实际是 PCA(n=10)。
     这是科学诚信问题。
 

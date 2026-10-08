@@ -15,7 +15,7 @@
         轴外场景数标在顶部；小提琴的核密度只用轴内的值估计，否则几个上千 °Brix 的离群值
         会把带宽撑大，整条小提琴变成一块矩形。
      b Forest plot（中位数 ± 95% bootstrap CI）—— 按 4 类迁移类型分层。
-        01CLAUDE.md §7.5 钦定：正文主图用 forest/dot plot 含 95% CI。用中位数而非均值：
+        项目约定 §7.5 钦定：正文主图用 forest/dot plot 含 95% CI。用中位数而非均值：
         发散运行把个别类型的均值推到几十 °Brix，均值图只剩一条横线，读不出典型场景的排序。
 
 图3  主张：用同一批目标标签做一次斜率/偏置校正后，各方法收敛到一条窄带，
@@ -34,7 +34,7 @@
   · 图题、图注、坐标名、图例名 均须中英文对照
   · 主要线条不小于 0.5 磅
   · 图表总数 ≤6 幅 → 本文 3 图 + 3 表
-  · 配色 color-blind safe，禁红绿组合，黑白打印可辨（01CLAUDE.md §8.2）
+  · 配色 color-blind safe，禁红绿组合，黑白打印可辨（项目约定 §8.2）
 
 ═══ 双语双通路（zh / en）═══
 本脚本一次运行出两套图：
@@ -975,7 +975,7 @@ def _spectra_two_stage(dp, year):
     样本集   = 再套 SSC>20 越界剔除 + 逐位重复光谱整组剔除（论文分析集）。
     """
     from sklearn.preprocessing import StandardScaler
-    # 原始光谱的正典源是共享库 05data（01CLAUDE.md §4.5.1：读 05data → 写 03data/processed）。
+    # 原始光谱的正典源是共享库 05data（项目约定 §4.5.1：读 05data → 写 03data/processed）。
     # 这里早先写的是 dp.DATA_DIR（=03data），而 2018/2025 的 03data 原始副本已按数据卫生
     # #36 核对 SHA-256 后删除，于是 fig_spectra 会 FileNotFoundError。改指 dp._MULTIYEAR_RAW。
     dat = dp._MULTIYEAR_RAW

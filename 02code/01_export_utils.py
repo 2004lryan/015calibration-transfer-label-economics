@@ -280,7 +280,7 @@ def load_processed_dataframe(year: int) -> pd.DataFrame:
       在 n≈40 的测试集上把 RMSE 从约 2.0 直接抬到约 7.1（×3.5）。
       它同时污染训练集拟合与斜率/偏置校正的拟合。
 
-      本过滤属 01CLAUDE.md §4.5 的 L1 白名单（"硬规则剔除：NaN/越界/质量码"）——
+      本过滤属项目约定 §4.5 的 L1 白名单（"硬规则剔除：NaN/越界/质量码"）——
       它是一条与数据量无关的硬规则，不构成数据泄漏。
 
     在此处过滤是因为本函数是全项目唯一的数据入口，所有实验脚本都经由它取数。
@@ -315,7 +315,7 @@ def load_processed_dataframe(year: int) -> pd.DataFrame:
     #   处置：**整组剔除**（而非保留首条）。保留任一条都需要假设采集缺陷的方向，
     #   而该方向无从证实；整组剔除是唯一不需要额外假设的选择，代价是损失约 2.7% 样本。
     #
-    #   本过滤同属 01CLAUDE.md §4.5 的 L1 白名单（"硬规则剔除：NaN/越界/质量码"），
+    #   本过滤同属项目约定 §4.5 的 L1 白名单（"硬规则剔除：NaN/越界/质量码"），
     #   且为与数据量无关的硬规则，不构成数据泄漏。§7.6 亦要求做近邻重复检查。
     spec_cols = get_spectrum_columns(df)
     if spec_cols:
@@ -622,7 +622,7 @@ def get_logger(file_stem: str) -> 'Logger':
 
 # ─── 标准目录创建（第二章目录树）──────────────────────────────────────────────
 def ensure_project_dirs() -> None:
-    """自动创建项目标准目录结构。详见 01CLAUDE.md 第二章。
+    """自动创建项目标准目录结构。详见项目约定第二章。
 
     `wandb/` 与 `runs/` 由对应工具自动管理，本函数不创建。
 
@@ -671,7 +671,7 @@ def processed_data_path(file_stem: str, suffix: str | None = None) -> str:
 def checkpoint_dir(file_stem: str, seed: int, timestamp: str | None = None) -> str:
     """07checkpoints/<file_stem>_<YY-MM-DD_HHMMSS>_seed<X>/
 
-    顺序：脚本 → 时间 → 种子，与 01CLAUDE.md 第二章目录树及第五章 Item 6 wandb run name 一致。
+    顺序：脚本 → 时间 → 种子，与项目约定第二章目录树及第五章 Item 6 wandb run name 一致。
     timestamp 缺省时取当前时间。返回目录路径，自动创建。
     """
     if timestamp is None:
@@ -744,7 +744,7 @@ def set_random_seed(seed: int, deterministic: bool = True, device: str | None = 
             sys.stderr.write(
                 "[WARN] set_random_seed: device='mps' detected — 跳过 cudnn.* 设置"
                 "（MPS 环境下 cudnn 设置无效），torch.use_deterministic_algorithms 仅 best-effort。"
-                " 详见 01CLAUDE.md 第五章 Item 5 MPS 豁免子条款。\n"
+                " 详见项目约定第五章 Item 5 MPS 豁免子条款。\n"
             )
         else:
             torch.backends.cudnn.deterministic = True
@@ -761,7 +761,7 @@ def enforce_publication_grade_device(
 ) -> None:
     """Formal 阶段硬件守卫：stage ∈ FORMAL_STAGES 且 device != 'cuda' 时 raise SystemExit。
 
-    详见 01CLAUDE.md 第五章 Item 5 MPS 豁免子条款"阻塞型 guard"。
+    详见项目约定第五章 Item 5 MPS 豁免子条款"阻塞型 guard"。
     所有 Formal 阶段入口脚本必须在 set_random_seed 之后、主体逻辑之前立即调用本函数。
     禁止任何形式绕过（环境变量、try/except 吞错、注释跳过等）。
 
@@ -788,7 +788,7 @@ def enforce_publication_grade_device(
     msg = (
         f"主结果 stage 必须 CUDA，当前 stage={stage!r}, device={device!r}；"
         f"切换 --device cuda 或将 stage 改为 'pilot' 后重跑。"
-        f"（FORMAL_STAGES={sorted(FORMAL_STAGES)}；详见 01CLAUDE.md 第五章 Item 5 MPS 豁免子条款）"
+        f"（FORMAL_STAGES={sorted(FORMAL_STAGES)}；详见项目约定第五章 Item 5 MPS 豁免子条款）"
     )
     if logger is not None:
         logger.log(f"[FATAL] {msg}")
@@ -843,7 +843,7 @@ def save_figure_bilingual(
 
 # ─── 一脚本一 xlsx 强制入口（第四章 Item 1）───────────────────────────────────
 def write_script_workbook(script_path: str, sheets: dict[Any, Any]) -> str:
-    """正式脚本唯一允许的 Excel 写出入口（CLAUDE.md 第四章 Item 1 强约束）。
+    """正式脚本唯一允许的 Excel 写出入口（项目约定第四章 Item 1 强约束）。
 
     严格执行"一脚本一 xlsx"：file_stem 由调用方所在脚本文件名（去 `.py`）派生，
     不接受任何自定义 stem。所有 dataset × task × protocol × budget × ablation ×
@@ -996,7 +996,7 @@ def write_model_card(run_name: str, fields: dict[str, Any]) -> str:
                 f"Formal 阶段模型卡 hardware/deterministic 不合规："
                 f"training_hardware={hw!r}（应以 'cuda' 开头）、"
                 f"deterministic_guarantee={det!r}（应为 'full'）。"
-                f" 详见 01CLAUDE.md 第五章 Item 5 + 第十一章 Item 3。"
+                f" 详见项目约定第五章 Item 5 + 第十一章 Item 3。"
             )
     run_dir = os.path.join(CHECKPOINTS_DIR, sanitize_filename(run_name))
     os.makedirs(run_dir, exist_ok=True)
@@ -1024,12 +1024,12 @@ def save_best_checkpoint(
     model_card_fields['ckpt_sha']，调用方传入的 'ckpt_sha' 会被覆盖。
 
     best 与 last 需分别调用两次（tag='best' / tag='last'），每次写一个 .pt 文件。
-    禁止裸 torch.save 跳过本封装——会导致 SHA-256 与模型卡缺失，违反 CLAUDE.md
+    禁止裸 torch.save 跳过本封装——会导致 SHA-256 与模型卡缺失，违反项目约定
     第五章 Item 6 "Checkpoint 联动" 强制规范。
 
     参数：
         model: 待保存的 nn.Module，仅 state_dict 落盘。
-        run_name: 与 wandb run name / 日志前缀一致的字符串，详见 CLAUDE.md 第五章 Item 6。
+        run_name: 与 wandb run name / 日志前缀一致的字符串，详见项目约定第五章 Item 6。
         model_card_fields: 模型卡字段；'ckpt_sha' 会被本函数覆盖，其余必填项见
             _MODELCARD_REQUIRED。
         tag: "best" 或 "last"，落盘文件名 `<tag>.pt`。
@@ -2204,7 +2204,7 @@ def init_wandb(
     mode: Literal["online", "offline", "disabled", "shared"] = "online",
     **wandb_init_kwargs: Any,
 ) -> Any:
-    """正式脚本唯一允许的 wandb.init 入口（CLAUDE.md 第五章 Item 6 强约束）。
+    """正式脚本唯一允许的 wandb.init 入口（项目约定第五章 Item 6 强约束）。
 
     强制按 `<脚本文件名>_<YY-MM-DD_HHMMSS>_seed<X>` 构造 run name，与 05logs/ 日志
     文件名前缀及 07checkpoints/<run_name>/ 目录完全对齐，确保 run ↔ 日志 ↔
@@ -2260,7 +2260,7 @@ def init_wandb(
 # ─── 环境捕获与依赖锁定（第五章 Item 5）───────────────────────────────────────
 _REQUIREMENTS_HEADER = (
     "# requirements.txt — 自动锁定（由 export_utils.freeze_requirements 在每次实验启动时刷新）\n"
-    "# 详见 01CLAUDE.md 第五章 Item 5\n"
+    "# 详见项目约定第五章 Item 5\n"
     "# 切勿手动编辑——本文件由 uv pip freeze / pip freeze 覆写\n"
     "\n"
 )

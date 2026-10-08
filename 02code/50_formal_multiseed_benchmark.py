@@ -3,18 +3,18 @@
 
 【本脚本存在的理由】
 18_exp（表1/表2 的来源）与 46_exp（表3 的来源）此前均为 **单种子 seed=42**，且 46 只跑了
-100 个场景。两处口径不一：表间无法互相印证，且不满足 01CLAUDE.md 第五章第 3 条
+100 个场景。两处口径不一：表间无法互相印证，且不满足项目约定第五章第 3 条
 "Formal 阶段 = CUDA + 全 5 种子"。本脚本把两者合并为一次运行：
 
   · 方法：PLSR / SVR / CNN / CNN+MMD / Phys+BL      —— 与 18_exp 逐字节一致
   · 校正：{裸, +slope/bias}                          —— 46_exp 的核心对照
   · 场景：04_migration_scenarios.json 全量 602 个
-  · 种子：Formal 5 粒 [20060515, 20041210, 19810915, 2023, 2024]（01CLAUDE.md §5.3）
+  · 种子：Formal 5 粒 [20060515, 20041210, 19810915, 2023, 2024]（项目约定 §5.3）
           外加 seed=42 作为与旧 18_exp 的复现锚点（不参与正式统计）
 
 于是表1/表2/表3 全部落在同一划分、同一组种子、同一份预测上，内部完全自洽。
 
-【统计口径（01CLAUDE.md §7.2，实验前预注册，禁止 post-hoc 切换）】
+【统计口径（项目约定 §7.2，实验前预注册，禁止 post-hoc 切换）】
   · 聚类单位 = 场景。同一场景的 5 个种子是重复测量，**不是**独立样本。
     先按场景对种子取均值 → 得到每场景一个值 → n_primary = 场景数。
   · 配对检验：Wilcoxon signed-rank（主，RMSE 分布重尾非正态）；paired t 仅作辅助报告。
@@ -118,7 +118,7 @@ CONFIG = {
     'grade_threshold':      13.0,
 }
 
-# 01CLAUDE.md §5.3：Formal 阶段固定 5 种子，双轨锚定
+# 项目约定 §5.3：Formal 阶段固定 5 种子，双轨锚定
 FORMAL_SEEDS = [20060515, 20041210, 19810915, 2023, 2024]
 ANCHOR_SEED = 42          # 与旧 18_exp 的复现锚点，不参与正式统计
 
@@ -156,7 +156,7 @@ def make_logger(tag=''):
 
 
 def set_seed(seed):
-    """六路同步。CUDA 通路开启确定性算法（01CLAUDE.md §5.4）。"""
+    """六路同步。CUDA 通路开启确定性算法（项目约定 §5.4）。"""
     os.environ['PYTHONHASHSEED'] = str(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -455,7 +455,7 @@ def run_phys(splits, device, epochs, lambda_bl):
 def run_shard(args, log):
     device = get_device(args.device)
     if args.device == 'cuda' and device != 'cuda':
-        raise RuntimeError('01CLAUDE.md §5.3：Formal 阶段 CUDA 强制，但当前不可用')
+        raise RuntimeError('项目约定 §5.3：Formal 阶段 CUDA 强制，但当前不可用')
     enforce_determinism(log)
     cap_gpu_memory(args.gpu_mem_frac, log)
 
@@ -569,7 +569,7 @@ def run_shard(args, log):
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-# 统计工具（01CLAUDE.md §7.2）
+# 统计工具（项目约定 §7.2）
 # ═══════════════════════════════════════════════════════════════════════════
 
 def cliffs_delta(x, y):
@@ -798,7 +798,7 @@ def do_merge(args, log):
             np.where(anchor_sum['偏差'].abs() < 0.05, '✅一致', '⚠️不一致'))
         anchor_sum = anchor_sum.sort_values('RMSE_mean')
 
-    # sheet 5：算力账（01CLAUDE.md §12.1）；基底与覆盖两处分片的元数据都计入
+    # sheet 5：算力账（项目约定 §12.1）；基底与覆盖两处分片的元数据都计入
     metas = []
     for mf in meta_files:
         with open(mf, 'r', encoding='utf-8') as f:

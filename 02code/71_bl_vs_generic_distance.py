@@ -130,7 +130,7 @@ def bl_amplification(X_src: FloatArray, X_tgt: FloatArray) -> tuple[float, float
 
 # ⚠ 公平性修订（2026-08-10，外部审计 F4 判 FAIL 后）：
 # 初版对 MMD 设了 MMD_MAX_N=400 的每域子采样上限、带宽只用 300 个池化样本，
-# 而 BL 放大倍数用全部样本。审计panel（gpt-5.6-sol / gpt-5.6-terra / grok-4.5）一致指出：
+# 而 BL 放大倍数用全部样本。审计 panel 一致指出：
 # 这是**只向基线注入近似噪声**的不对称设置，在"BL 是否更优"的对抗比较里不可接受。
 # 修法选择「加强基线」而不是「削弱 BL」——全部预测子一律用**该场景的全部样本**，
 # MMD 与带宽都不再子采样。O(n²) 用 ‖a‖²+‖b‖²−2a·b 展开后完全跑得动。

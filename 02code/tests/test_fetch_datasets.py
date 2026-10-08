@@ -1,6 +1,6 @@
 """Integrity tests for the dataset registry shipped to reproducers.
 
-These checksums are the repository's reproducibility promise (01CLAUDE.md 4.5.1):
+These checksums are the repository's reproducibility promise (project conventions 4.5.1):
 they are quoted in data/DATA.md and in the manuscript. A malformed or drifting
 entry here silently breaks that promise, so the registry itself is tested.
 """

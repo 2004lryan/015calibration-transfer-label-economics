@@ -53,7 +53,7 @@ COMMON_WAVELENGTH_MIN = 590.67
 COMMON_WAVELENGTH_MAX = 1001.12
 
 # 2018/2019/2025 原始数据统一从跨项目共享库 05data（正典源、只读）读取；
-# 读 05data → 写 03data/processed 是 01CLAUDE.md §4.5.1 的法定预处理流向。
+# 读 05data → 写 03data/processed 是项目约定 §4.5.1 的法定预处理流向。
 # （历史上 2018/2025 曾在 03data 存原始副本，已核 SHA-256 与 05data 字节一致后统一改读 05data 并删副本。）
 _MULTIYEAR_RAW = os.path.normpath(os.path.join(
     BASE_DIR, '..', '..', '05data', '001_apple_hyperspectral_multiyear'))
