@@ -2,7 +2,7 @@
 67_winners_curse_reanalysis.py: winner's curse 无偏复核——预先指定代表法与全族均值对比
 
 背景:
-    fusion 审稿一致指出:主表(reckoning/Table 3)的"最优简单 vs 最优深度"是每任务
+    外审一致指出:主表(reckoning/Table 3)的"最优简单 vs 最优深度"是每任务
     事后取族内 min(envelope),且简单族 2 法、深度族 6 法数量不等,min 选择对深度族更
     有利,构成 winner's curse。本脚本用同一批已落地结果(62 classical + 64 deep,不重训
     任何模型)重算两个不含 min 选择偏差的对比,检验"简单 >= 深度"是否稳健:

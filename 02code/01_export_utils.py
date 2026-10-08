@@ -11,7 +11,7 @@
     - 日志记录 (输出、表格、统计)
     - 光谱/域适应专用工具 (波长解析、年份-产地数据加载、域合并、按产地切分)
 
-    ── 以下为 ARIS 模板同步补齐部分（见文件末尾"模板同步区"）──
+    ── 以下为项目模板同步补齐部分（见文件末尾"模板同步区"）──
     - 六路随机种子 (set_random_seed)、Formal 阶段 CUDA 守卫 (enforce_publication_grade_device)
     - Checkpoint + 模型卡 + 数据卡 (save_best_checkpoint / write_model_card / write_datasheet)
     - wandb 统一入口 (init_wandb)、算力跟踪 (track_compute)
@@ -599,7 +599,7 @@ def get_logger(file_stem: str) -> 'Logger':
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 模板同步区 —— 以下全部函数从 ARIS 模板 02code/export_utils.py 同步补齐
+# 模板同步区 —— 以下全部函数从项目模板 02code/export_utils.py 同步补齐
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # 本区以上为 015 项目原有实现（26 个函数 + Logger 类），一行未改，其中 17 个

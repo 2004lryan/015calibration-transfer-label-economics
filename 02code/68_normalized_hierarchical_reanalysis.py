@@ -2,7 +2,7 @@
 68_normalized_hierarchical_reanalysis.py: 归一化端点(NRMSEP)+基准级(层次)重分析
 
 背景:
-    fusion Round2 最严格审稿人(MODEL1)提两点 CRITICAL,均为对已落地结果的重新分析
+    外审第二轮最严格的一份意见提两点 CRITICAL,均为对已落地结果的重新分析
     (不重训任何模型):
       #1 主分析在异量纲任务上池化原始 RMSEP 不可比 → 改用无量纲 NRMSEP = RMSEP/σ_tgt
          = 1/RPD 复算简单 vs 深度族对比,检验结论是否依赖量纲。
